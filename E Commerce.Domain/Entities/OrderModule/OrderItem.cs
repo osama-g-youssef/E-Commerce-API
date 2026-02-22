@@ -8,7 +8,7 @@ namespace E_Commerce.Domain.Entities.OrderModule
 {
     public class OrderItem: BaseEntity<int>
     {
-        public ProductItemOrdered productItemOrdered { get; set; } = default!;
+        public ProductItemOrdered Product { get; set; } = default!;
         public decimal Price { get; set; }
         public int Quantity { get; set; }
     }

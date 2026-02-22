@@ -14,12 +14,12 @@ namespace E_Commerce.Persistence.Data.Configurations
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
             builder.Property(X => X.Price)
-                .HasPrecision(8, 2);
+                .HasColumnType("decimal(8,2)");
 
-            builder.OwnsOne(X => X.productItemOrdered, OEntity =>
+            builder.OwnsOne(X => X.Product, OEntity =>
             {
                 OEntity.Property(X => X.ProductName).HasMaxLength(100);
-                OEntity.Property(X => X.PictureUrl).HasMaxLength(100);
+                OEntity.Property(X => X.PictureUrl).HasMaxLength(200);
 
             });
         }

@@ -27,8 +27,11 @@ namespace E_Commerce.Services
         }
         public async Task<Result<OrderToReturnDTO>> CreateOrderAsync(OrderDTO orderDTO, string Email)
         {
-            // AddressDTO => Address
-            var OrderAddress = mapper.Map<OrderAddress>(orderDTO.Address);
+           
+            var OrderAddress = mapper.Map<AddressDTO,OrderAddress>(orderDTO.Address);
+            
+
+
             var Basket =await basketRepository.GetBasketAsync(orderDTO.BasketId);
             if (Basket == null) return Error.NotFound("Basket not found.", $"Basket with Id {orderDTO.BasketId} is not found ");
 
@@ -47,13 +50,13 @@ namespace E_Commerce.Services
             var SubTotal= OrderItems.Sum(I=>I.Price * I.Quantity);
             var Order = new Order
             {
+                UserEmail = Email,
                 Address = OrderAddress,
                 DeliveryMethod = DeliveryMethod,
                 Subtotal = SubTotal,
-                Items = OrderItems,
-                UserEmail = Email
+                Items = OrderItems
             };
-            await unitOfWork.GetRepository<Order, int>().AddAsync(Order);
+            await unitOfWork.GetRepository<Order, Guid>().AddAsync(Order);
             var Result = await unitOfWork.SaveChangesAsync() >0 ;
             if(!Result ) return Error.Failure("Order Creation Failed", "Failed to create order due to an internal error.");
             return mapper.Map<OrderToReturnDTO>(Order);
@@ -63,7 +66,7 @@ namespace E_Commerce.Services
         {
             return new OrderItem()
             {
-                productItemOrdered = new ProductItemOrdered
+                Product = new ProductItemOrdered
                 {
                     ProductId = Product.Id,
                     ProductName = Product.Name,

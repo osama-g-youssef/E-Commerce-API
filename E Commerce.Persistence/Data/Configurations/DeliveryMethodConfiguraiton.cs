@@ -14,7 +14,7 @@ namespace E_Commerce.Persistence.Data.Configurations
         public void Configure(EntityTypeBuilder<DeliveryMethod> builder)
         {
             builder.Property(X => X.Price)
-                .HasPrecision(8, 2);
+                .HasColumnType("decimal(8,2)");
             builder.Property(X => X.ShortName).HasMaxLength(50);
             builder.Property(X => X.Description).HasMaxLength(50);
             builder.Property(X => X.DeliveryTime).HasMaxLength(50);

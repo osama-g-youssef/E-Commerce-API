@@ -13,8 +13,8 @@ namespace E_Commerce.Persistence.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.Property(X=> X.Subtotal)
-                .HasPrecision(8,2);
+            builder.Property(X => X.Subtotal)
+                .HasColumnType("decimal(8,2)");
 
             builder.OwnsOne(X=> X.Address, OEntity =>
             {
@@ -22,6 +22,7 @@ namespace E_Commerce.Persistence.Data.Configurations
                 OEntity.Property(X => X.LastName).HasMaxLength(50).IsRequired();
                 OEntity.Property(X => X.Street).HasMaxLength(50).IsRequired();
                 OEntity.Property(X => X.City).HasMaxLength(50).IsRequired();
+                OEntity.Property(X => X.Country).HasMaxLength(50).IsRequired();
             });
         }
     }

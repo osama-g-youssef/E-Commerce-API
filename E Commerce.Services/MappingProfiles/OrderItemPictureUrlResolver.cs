@@ -20,20 +20,20 @@ namespace E_Commerce.Services.MappingProfiles
         }
         public string Resolve(OrderItem source, OrderItemDTO destination, string destMember, ResolutionContext context)
         {
-            if(string.IsNullOrEmpty(source.productItemOrdered.PictureUrl))
+            if(string.IsNullOrEmpty(source.Product.PictureUrl))
             {
                 return string.Empty;
             }
-            if(source.productItemOrdered.PictureUrl.StartsWith("http"))
+            if(source.Product.PictureUrl.StartsWith("http")|| source.Product.PictureUrl.StartsWith("https"))
             {
-                return source.productItemOrdered.PictureUrl;
+                return source.Product.PictureUrl;
             }
             var BaseUrl = configuration.GetSection("URLS")["BaseUrl"];
 
             if (string.IsNullOrEmpty(BaseUrl))
                 return string.Empty;
 
-            var PicUrl = $"{BaseUrl}{source.productItemOrdered.PictureUrl}";
+            var PicUrl = $"{BaseUrl}{source.Product.PictureUrl}";
             return PicUrl;
         }
     }
