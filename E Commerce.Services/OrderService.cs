@@ -76,5 +76,18 @@ namespace E_Commerce.Services
                 Quantity = item.Quantity
             };
         }
+
+        public async Task<Result<IEnumerable<DeliveryMethodDTO>>> GetAllDeliveryMethodsAsync()
+        {
+            var deliveryMethods = await unitOfWork.GetRepository<DeliveryMethod,int>().GetAllAsync();
+            if(!deliveryMethods.Any())
+                return Error.NotFound("No Delivery Methods Found", "There are no delivery methods available at the moment.");
+
+            var deliveryMethodDTOs = mapper.Map<IEnumerable<DeliveryMethod>, IEnumerable<DeliveryMethodDTO>>(deliveryMethods);
+            if(deliveryMethodDTOs == null)
+                return Error.NotFound("No Delivery Methods Found", "There are no delivery methods available at the moment.");
+
+            return Result<IEnumerable<DeliveryMethodDTO>>.Ok(deliveryMethodDTOs);
+        }
     }
 }

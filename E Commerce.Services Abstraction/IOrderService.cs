@@ -12,7 +12,10 @@ namespace E_Commerce.Services_Abstraction
     {
         //Create Order
         // Takes Order DTO , Email => Order To Return DTO
-
+         
         Task<Result<OrderToReturnDTO>> CreateOrderAsync(OrderDTO orderDTO, string Email);
+        // Get Delivery Methods 
+
+        Task<Result<IEnumerable<DeliveryMethodDTO>>> GetAllDeliveryMethodsAsync();
     }
 }

@@ -23,6 +23,9 @@ namespace E_Commerce.Services.MappingProfiles
                 .ForMember(dest => dest.PictureUrl, opt => opt.MapFrom<OrderItemPictureUrlResolver>());
 
 
+            CreateMap<DeliveryMethod, DeliveryMethodDTO>();
+
+
 
 
         }

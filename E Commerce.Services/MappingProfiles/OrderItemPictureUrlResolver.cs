@@ -24,7 +24,7 @@ namespace E_Commerce.Services.MappingProfiles
             {
                 return string.Empty;
             }
-            if(source.Product.PictureUrl.StartsWith("http")|| source.Product.PictureUrl.StartsWith("https"))
+            if(source.Product.PictureUrl.StartsWith("http")|| source.Product.PictureUrl.StartsWith(""))
             {
                 return source.Product.PictureUrl;
             }
