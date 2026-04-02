@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Shared.DTOs.OrderDTO
 {
-    public class OrderDTO { 
-         public string BasketId { get; set; }
+    public record OrderDTO { 
+         public string BasketId { get; init; }
 
-        public int DeliveryMethodId{get;set;}
-        public AddressDTO Address { get; set; } 
+        public int DeliveryMethodId{get;init;}
+        public AddressDTO Address { get; init; } 
     }
 }

@@ -2,11 +2,11 @@
 {
     public record AddressDTO
     {
-        public string FirstName { get; set; } = default!;
-        public string LastName { get; set; } = default!;
-        public string City { get; set; } = default!;
-        public string Country { get; set; } = default!;
-        public string Street { get; set; } = default!;
+        public string FirstName { get; init; } 
+        public string LastName { get; init; }  
+        public string City { get; init; } 
+        public string Country { get; init; } 
+        public string Street { get; init; } 
     }
 
 

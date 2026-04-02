@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Shared.DTOs.OrderDTO
 {
-    public class DeliveryMethodDTO
+    public record DeliveryMethodDTO
     {
         
-       public int Id { get; set; }
+       public int Id { get; init; }
 
-        public string ShortName { get; set; } = default!;
-        public string Descrition { get; set; } = default!;
-        public string DeliveryTime { get; set; } = default!;
+        public string ShortName { get; init; } = default!;
+        public string Descrition { get; init; } = default!;
+        public string DeliveryTime { get; init; } = default!;
 
-        public decimal Price { get; set; }
+        public decimal Price { get; init; }
 
     }
 }
