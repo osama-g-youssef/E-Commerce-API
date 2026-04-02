@@ -2,6 +2,7 @@
 using E_Commerce.Domain.Contract;
 using E_Commerce.Domain.Entities.OrderModule;
 using E_Commerce.Domain.Entities.ProductModule;
+using E_Commerce.Services.Specifications.OrderSpecification;
 using E_Commerce.Services_Abstraction;
 using E_Commerce.Shared.CommonResult;
 using E_Commerce.Shared.DTOs.OrderDTO;
@@ -88,6 +89,32 @@ namespace E_Commerce.Services
                 return Error.NotFound("No Delivery Methods Found", "There are no delivery methods available at the moment.");
 
             return Result<IEnumerable<DeliveryMethodDTO>>.Ok(deliveryMethodDTOs);
+        }
+
+        public async Task<Result<IEnumerable<OrderToReturnDTO>>> GetAllOrdersAsync(string Email)
+        {
+            var OrderSpec = new OrderSpecification(Email);
+            var Orders = await unitOfWork.GetRepository<Order, Guid>().GetAllAsync(OrderSpec);
+
+            if (!Orders.Any())
+                return Error.NotFound(
+               "No Orders Found",$"No orders found fo rthe user with : {Email}"
+                    );
+            var Data = mapper.Map<IEnumerable<Order>, IEnumerable<OrderToReturnDTO>>(Orders);
+            return Result<IEnumerable<OrderToReturnDTO>>.Ok(Data);
+        }
+
+        public async Task<Result<OrderToReturnDTO>> GetOrderByAsync(Guid Id, string Email)
+        {
+            var OrderSpec = new OrderSpecification(Id, Email);
+            var Order = await unitOfWork.GetRepository<Order, Guid>().GetByIdAsync(OrderSpec);
+            if (Order is null) 
+                return Error.NotFound(
+               "No Orders Found", $"No orders found for the user with : {Email} and order id : {Id}"
+                    );
+            var Data = mapper.Map<Order, OrderToReturnDTO>(Order);
+            return Result<OrderToReturnDTO>.Ok(Data);
+
         }
     }
 }

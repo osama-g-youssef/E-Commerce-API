@@ -11,6 +11,10 @@ namespace E_Commerce.Services.Specifications
 {
     public abstract class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
+        protected BaseSpecifications(Expression<Func<TEntity, bool>> criteriaExoression)
+        {
+            Criteria = criteriaExoression;
+        }
         #region Includes
         public ICollection<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = []; // Read only Property get its value by the constructor 
 
@@ -23,10 +27,6 @@ namespace E_Commerce.Services.Specifications
         #region Criteria
 
         public Expression<Func<TEntity, bool>> Criteria { get; }
-        protected BaseSpecifications(Expression<Func<TEntity, bool>> criteriaExoression)
-        {
-            Criteria = criteriaExoression;
-        }
         #endregion
 
         #region Sorting
