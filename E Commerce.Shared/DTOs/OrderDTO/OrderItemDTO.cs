@@ -1,5 +1,11 @@
 ﻿namespace E_Commerce.Shared.DTOs.OrderDTO
 {
-    public record OrderItemDTO(string PruductName , string PictureUrl, decimal Price, int Quantity);
+    public class OrderItemDTO
+    {
+        public string ProductName { get; set; }
+        public string PictureUrl { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+    }
 
 }

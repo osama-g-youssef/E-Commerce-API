@@ -57,10 +57,23 @@ namespace E_Commerce.Services
                 Subtotal = SubTotal,
                 Items = OrderItems
             };
-            await unitOfWork.GetRepository<Order, Guid>().AddAsync(Order);
-            var Result = await unitOfWork.SaveChangesAsync() >0 ;
-            if(!Result ) return Error.Failure("Order Creation Failed", "Failed to create order due to an internal error.");
-            return mapper.Map<OrderToReturnDTO>(Order);
+            
+                await unitOfWork.GetRepository<Order, Guid>().AddAsync(Order);
+                var Result = await unitOfWork.SaveChangesAsync() > 0;
+                if (!Result) return Error.Failure("Order Creation Failed", "Failed to create order due to an internal error.");
+
+
+
+            try
+            {
+                return mapper.Map<OrderToReturnDTO>(Order);
+            }
+            catch (Exception ex)
+            {
+
+                
+                return Error.Failure("Order Creation Failed", $"Failed to create order due to an internal error. Exception: {ex.Message}");
+            }
         }
 
         private static OrderItem CreateOrderItem(Domain.Entities.BasketModule.BasketItem item, Product Product)
@@ -104,7 +117,7 @@ namespace E_Commerce.Services
             return Result<IEnumerable<OrderToReturnDTO>>.Ok(Data);
         }
 
-        public async Task<Result<OrderToReturnDTO>> GetOrderByAsync(Guid Id, string Email)
+        public async Task<Result<OrderToReturnDTO>> GetOrderByIdAsync(Guid Id, string Email)
         {
             var OrderSpec = new OrderSpecification(Id, Email);
             var Order = await unitOfWork.GetRepository<Order, Guid>().GetByIdAsync(OrderSpec);

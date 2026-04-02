@@ -1,10 +1,12 @@
 ﻿using E_Commerce.Shared.CommonResult;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +19,7 @@ namespace E_Commerce.Presentation.Controllers
         // # handle Result without value 
         // Result is success Return NoContent 204
         // Result is failed Return Problem with status code  and error details
+
         protected IActionResult HandleResult(Result result)
         {
             if (result.IsSuccess)
@@ -25,6 +28,7 @@ namespace E_Commerce.Presentation.Controllers
                 return HandleProblem(result.Errors);
 
         }
+        protected string GetEmailFromToken()=> User.FindFirstValue(ClaimTypes.Email)!;
 
         // # handle result with value
         // Result is success Return Okj 200 with value

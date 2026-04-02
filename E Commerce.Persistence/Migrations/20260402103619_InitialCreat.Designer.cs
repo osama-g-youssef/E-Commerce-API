@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace E_Commerce.Persistence.Data.Migrations
+namespace E_Commerce.Persistence.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20260117145505_OrderModuleTables")]
-    partial class OrderModuleTables
+    [Migration("20260402103619_InitialCreat")]
+    partial class InitialCreat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,6 @@ namespace E_Commerce.Persistence.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(8, 2)
                         .HasColumnType("decimal(8,2)");
 
                     b.Property<string>("ShortName")
@@ -59,11 +58,9 @@ namespace E_Commerce.Persistence.Data.Migrations
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.OrderModule.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DeliveryMethodId")
                         .HasColumnType("int");
@@ -75,7 +72,6 @@ namespace E_Commerce.Persistence.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Subtotal")
-                        .HasPrecision(8, 2)
                         .HasColumnType("decimal(8,2)");
 
                     b.Property<string>("UserEmail")
@@ -97,11 +93,10 @@ namespace E_Commerce.Persistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(8, 2)
                         .HasColumnType("decimal(8,2)");
 
                     b.Property<int>("Quantity")
@@ -200,8 +195,8 @@ namespace E_Commerce.Persistence.Data.Migrations
 
                     b.OwnsOne("E_Commerce.Domain.Entities.OrderModule.OrderAddress", "Address", b1 =>
                         {
-                            b1.Property<int>("OrderId")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("OrderId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
                                 .IsRequired()
@@ -210,7 +205,8 @@ namespace E_Commerce.Persistence.Data.Migrations
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
@@ -247,15 +243,15 @@ namespace E_Commerce.Persistence.Data.Migrations
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
 
-                    b.OwnsOne("E_Commerce.Domain.Entities.OrderModule.ProductItemOrdered", "productItemOrdered", b1 =>
+                    b.OwnsOne("E_Commerce.Domain.Entities.OrderModule.ProductItemOrdered", "Product", b1 =>
                         {
                             b1.Property<int>("OrderItemId")
                                 .HasColumnType("int");
 
                             b1.Property<string>("PictureUrl")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
 
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -273,7 +269,7 @@ namespace E_Commerce.Persistence.Data.Migrations
                                 .HasForeignKey("OrderItemId");
                         });
 
-                    b.Navigation("productItemOrdered")
+                    b.Navigation("Product")
                         .IsRequired();
                 });
 

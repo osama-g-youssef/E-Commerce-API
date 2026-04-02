@@ -22,7 +22,7 @@ namespace E_Commerce.Services_Abstraction
         Task<Result<IEnumerable<OrderToReturnDTO>>> GetAllOrdersAsync(string Email);
 
         // Get order by id for user with specific email
-        Task<Result<OrderToReturnDTO>> GetOrderByAsync(Guid Id, string Email);
+        Task<Result<OrderToReturnDTO>> GetOrderByIdAsync(Guid Id, string Email);
 
     }
 }

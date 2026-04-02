@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,12 @@ namespace E_Commerce.Persistence.Data.Configurations
                 OEntity.Property(X => X.City).HasMaxLength(50).IsRequired();
                 OEntity.Property(X => X.Country).HasMaxLength(50).IsRequired();
             });
+        //    builder
+        //.HasMany(o => o.Items)
+        //.WithOne() // لا توجد Navigation Property داخل OrderItem تشير للأوردر
+        //.HasForeignKey("OrderId") // هذا هو العمود الذي سيتم إنشاؤه في جدول OrderItems
+        //.IsRequired()
+        //.OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

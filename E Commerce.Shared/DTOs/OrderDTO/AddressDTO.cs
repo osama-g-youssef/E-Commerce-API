@@ -1,6 +1,13 @@
 ﻿namespace E_Commerce.Shared.DTOs.OrderDTO
 {
-    public record AddressDTO(string FirstName, string LastName, string Street, string City, string Country);
-    
-    
+    public record AddressDTO
+    {
+        public string FirstName { get; set; } = default!;
+        public string LastName { get; set; } = default!;
+        public string City { get; set; } = default!;
+        public string Country { get; set; } = default!;
+        public string Street { get; set; } = default!;
+    }
+
+
 }

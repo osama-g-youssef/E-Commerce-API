@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Shared.DTOs.OrderDTO
 {
-    public record OrderToReturnDTO(Guid Id, string UserEmail,ICollection<OrderItemDTO> Items,AddressDTO Address,
-        string DeliveryMethod, string OrderStatus,DateTimeOffset OrderDate,decimal SubTotal, decimal Total);
+    public record OrderToReturnDTO
+    {
+        public Guid Id { get; init; }
+        public string UserEmail { get; init; } 
+        public ICollection<OrderItemDTO> Items { get; init; }
+        public AddressDTO Address { get; init; }
+        public string DeliveryMethod { get; init; } 
+        public string Status { get; init; }
+        public DateTimeOffset OrderDate { get; init; }
+        public decimal SubTotal { get; init; }
+        public decimal Total { get; init; }
+    }
 }

@@ -91,6 +91,8 @@ namespace E_Commerce.Web
                 };
 
             });
+
+            builder.Services.AddScoped<IOrderService,OrderService>();
             #endregion
 
             var app = builder.Build();

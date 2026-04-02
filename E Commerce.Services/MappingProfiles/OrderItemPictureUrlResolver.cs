@@ -20,21 +20,43 @@ namespace E_Commerce.Services.MappingProfiles
         }
         public string Resolve(OrderItem source, OrderItemDTO destination, string destMember, ResolutionContext context)
         {
-            if(string.IsNullOrEmpty(source.Product.PictureUrl))
+            //if(string.IsNullOrEmpty(source.Product.PictureUrl))
+            //{
+            //    return string.Empty;
+            //}
+            //if(source.Product.PictureUrl.StartsWith("http")|| source.Product.PictureUrl.StartsWith(""))
+            //{
+            //    return source.Product.PictureUrl;
+            //}
+            //var BaseUrl = configuration.GetSection("URLS")["BaseUrl"];
+
+            //if (string.IsNullOrEmpty(BaseUrl))
+            //    return string.Empty;
+
+            //var PicUrl = $"{BaseUrl}{source.Product.PictureUrl}";
+            //return PicUrl;
+
+
+
+            if (source?.Product == null || string.IsNullOrEmpty(source.Product.PictureUrl))
             {
                 return string.Empty;
             }
-            if(source.Product.PictureUrl.StartsWith("http")|| source.Product.PictureUrl.StartsWith(""))
+
+            // If it's already an absolute URL, return as-is
+            if (Uri.IsWellFormedUriString(source.Product.PictureUrl, UriKind.Absolute))
             {
                 return source.Product.PictureUrl;
             }
-            var BaseUrl = configuration.GetSection("URLS")["BaseUrl"];
 
-            if (string.IsNullOrEmpty(BaseUrl))
-                return string.Empty;
+            var baseUrl = configuration["URLS:BaseUrl"];
+            if (string.IsNullOrEmpty(baseUrl))
+                return source.Product.PictureUrl; // fallback to relative path if no BaseUrl configured
 
-            var PicUrl = $"{BaseUrl}{source.Product.PictureUrl}";
-            return PicUrl;
+            baseUrl = baseUrl.TrimEnd('/');
+            var picPath = source.Product.PictureUrl.TrimStart('/');
+
+            return $"{baseUrl}/{picPath}";
         }
     }
 }
