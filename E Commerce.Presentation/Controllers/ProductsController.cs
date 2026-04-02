@@ -2,6 +2,7 @@
 using E_Commerce.Services_Abstraction;
 using E_Commerce.Shared;
 using E_Commerce.Shared.DTOs.ProductDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,10 +23,10 @@ namespace E_Commerce.Presentation.Controllers
             _productService = productService;
         }
 
-
+        [Authorize(Roles ="Admin")]
         [HttpGet] // swagger doesn't know it is a get verb so we should mention
         // Get : BaseUrl/api/Products
-        [RedisCache(5)]
+        //[RedisCache(5)]
         public async Task<ActionResult<PaginatedResult<ProductDTO>>>GetProducts([FromQuery]ProductQueryParams queryParams)
         {
             var products = await _productService.GetAllProductsAsync(queryParams);

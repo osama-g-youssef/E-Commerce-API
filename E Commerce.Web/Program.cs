@@ -12,10 +12,13 @@ using E_Commerce.Services_Abstraction;
 using E_Commerce.Web.CustomMiddlewares;
 using E_Commerce.Web.Extentions;
 using E_Commerce.Web.Factories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace E_Commerce.Web
@@ -70,6 +73,26 @@ namespace E_Commerce.Web
             builder.Services.AddIdentityCore<ApplicationUser>()// register management only
                 .AddRoles<IdentityRole>() // register role management 
                 .AddEntityFrameworkStores<StoreIdentityDbContext>();
+            builder.Services.AddAuthentication(Options =>
+            {
+                Options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;//scema to validate the token 
+                Options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;// scheme to challenge the user make the status code 
+            }).AddJwtBearer(Options =>
+            {
+                Options.SaveToken = true; // save token in the http context , get token async later , if it is okey 
+                Options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = builder.Configuration["JWTOptions:Issuer"],
+                    ValidAudience = builder.Configuration["JWTOptions:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTOptions:SecurityKey"]!)),
+                };
+
+            });
+
+            builder.Services.AddScoped<IOrderService,OrderService>();
             #endregion
 
             var app = builder.Build();
@@ -116,6 +139,8 @@ namespace E_Commerce.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseStaticFiles(); // to serve static files from wwwroot folder but in version 9 and above its enabled by default
 
             app.MapControllers(); 

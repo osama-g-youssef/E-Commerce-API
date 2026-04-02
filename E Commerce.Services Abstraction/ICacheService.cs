@@ -1,4 +1,6 @@
-﻿using System;
+﻿using E_Commerce.Shared.CommonResult;
+using E_Commerce.Shared.DTOs.IdentityDTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +12,7 @@ namespace E_Commerce.Services_Abstraction
     {
         Task<string?> GetAsync(string CacheKey);
         Task SetAsync(string CacheKey, object CacheValue, TimeSpan TimeToLive);
+
+
     }
 }
