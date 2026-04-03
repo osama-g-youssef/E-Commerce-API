@@ -1,8 +1,11 @@
-﻿using E_Commerce.Domain.Entities.IdentityModule;
+﻿using AutoMapper;
+using E_Commerce.Domain.Entities.IdentityModule;
 using E_Commerce.Services_Abstraction;
 using E_Commerce.Shared.CommonResult;
 using E_Commerce.Shared.DTOs.IdentityDTO;
+using E_Commerce.Shared.DTOs.OrderDTO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,11 +20,13 @@ namespace E_Commerce.Services
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration configuration,IMapper mapper)
         {
             this.userManager = userManager;
             this.configuration = configuration;
+            this.mapper = mapper;
         }
 
         public async Task<bool> CheckEmailAsync(string Email)
@@ -29,6 +34,7 @@ namespace E_Commerce.Services
             var User = await userManager.FindByEmailAsync(Email);
             return User != null;
         }
+
 
         public async Task<Result<UserDTO>> GetUserByEmailAsync(string Email)
         {
@@ -73,6 +79,7 @@ namespace E_Commerce.Services
                 .Select(e => Error.Validation(e.Code, e.Description))
                 .ToList();
         }
+
         private async Task<string> CreateTokenAsync(ApplicationUser user)
         {
             // Token [Issuer, Audience, Claims, Expire, SigningCredintials(signature)]
@@ -99,5 +106,45 @@ namespace E_Commerce.Services
                 );
             return new JwtSecurityTokenHandler().WriteToken(Token);// return it on shape of string
         }
+        public async Task<Result<AddressDTO>> GetUserAddressAsync(string Email)
+        {
+            var user = await userManager.Users.Include(u=>u.Address).FirstOrDefaultAsync(X=>X.Email == Email);
+            if (user == null)
+                return Error.NotFound("user .Notfound", $"user with this email{Email} was not found");
+            if (user.Address == null)
+                return Error.NotFound("address not found", $"address for the user with this email {Email} was not found");
+
+            return mapper.Map<AddressDTO>(user.Address);
+
+
+        }
+        public async Task<Result<AddressDTO>> UpdateUserAddressAsync(string Email, AddressDTO addressDTO)
+        {
+            var user = await userManager.Users.Include(u => u.Address).FirstOrDefaultAsync(X => X.Email == Email);
+            if (user == null)
+                return Error.NotFound("user .Notfound", $"user with this email{Email} was not found");
+
+            if (user.Address is not null)
+            {
+                //update on the same object 
+                user.Address.FirstName = addressDTO.FirstName;
+                user.Address.LastName = addressDTO.LastName;
+                user.Address.City = addressDTO.City;
+                user.Address.Country = addressDTO.Country;
+                user.Address.Street = addressDTO.Street;
+
+            }
+            else // create new address and assign it to the user
+            {
+                user.Address= mapper.Map<Address>(addressDTO);
+            }
+
+             await userManager.UpdateAsync(user);
+             return mapper.Map<AddressDTO>(user.Address);
+
+
+
+        }
+
     }
 }

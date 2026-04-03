@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Shared.CommonResult;
 using E_Commerce.Shared.DTOs.IdentityDTO;
+using E_Commerce.Shared.DTOs.OrderDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,15 @@ namespace E_Commerce.Services_Abstraction
 
         Task<bool> CheckEmailAsync(string Email);
         Task<Result<UserDTO>> GetUserByEmailAsync(string Email);
+
+
+        //Get User Address by email 
+        // takes email and return addressDTO
+        Task<Result<AddressDTO>> GetUserAddressAsync(string Email);
+
+        //Update User Address by email
+        // takes email and addressDTO and return addressDTO
+        Task<Result<AddressDTO>> UpdateUserAddressAsync(string Email, AddressDTO addressDTO);
 
     }
 }
