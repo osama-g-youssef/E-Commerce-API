@@ -66,6 +66,18 @@ namespace E_Commerce.Web
         }
     });
             });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("DevelopmentPolicy",builder =>
+                {
+                    builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });//and there is one for production but with specific origins and methods and headers
+
+
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -173,6 +185,7 @@ namespace E_Commerce.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("DevelopmentPolicy"); 
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles(); // to serve static files from wwwroot folder but in version 9 and above its enabled by default
