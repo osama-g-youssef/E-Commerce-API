@@ -111,8 +111,7 @@ namespace E_Commerce.Services
             var user = await userManager.Users.Include(u=>u.Address).FirstOrDefaultAsync(X=>X.Email == Email);
             if (user == null)
                 return Error.NotFound("user .Notfound", $"user with this email{Email} was not found");
-            if (user.Address == null)
-                return Error.NotFound("address not found", $"address for the user with this email {Email} was not found");
+
 
             return mapper.Map<AddressDTO>(user.Address);
 
