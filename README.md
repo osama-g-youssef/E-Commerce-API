@@ -12,7 +12,7 @@ The project is structured into four main layers, following the **Onion Architect
     This is the heart of the system, containing everything related to the business domain:
     * **Entities:** Domain models (Product, Order, Category, Brand, etc.).
     * **Service Abstractions:** Interfaces defining the contracts for Business Logic.
-    * **Service Implementation:** The actual logic for **Order Processing**, and **Token Generation**.
+    * **Service Implementation:** The actual logic for **Order Processing**,**Payment Handling**, and **Token Generation**.
 2.  **Repository Layer (Infrastructure):**
     The Data Access and Infrastructure layer:
     * **Data Context:** Entity Framework Core implementation.
@@ -89,7 +89,7 @@ Handles the financial transactions securely.
 
 # E-Commerce Solution (.NET 8)
 
-Layered E-Commerce solution using .NET 8, EF Core, Redis.
+Layered E-Commerce solution using .NET 8, EF Core, Redis, and Stripe.
 
 ## Prerequisites
 - .NET 8 SDK
@@ -109,10 +109,12 @@ Layered E-Commerce solution using .NET 8, EF Core, Redis.
    dotnet restore  
    dotnet build
 
-3. **Configure Secrets**  
+3. **Configure Secrets**   
    cd PresentationLayer/E-Commerce.Web  
    dotnet user-secrets init  
    dotnet user-secrets set "JWTOptions:SecretKey" "your-secret-key"  
+   dotnet user-secrets set "Stripe:SKey" "sk_test..."  
+   dotnet user-secrets set "Stripe:EndpointSecret" "whsec..."  
 
 
 4. **Update appsettings.Development.json**  
