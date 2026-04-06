@@ -47,6 +47,7 @@ The project is structured into four main layers, following the **Onion Architect
 * **Security:** Identity Framework & JWT Authentication
 * **Documentation:** Swagger UI
 * **Mapping:** AutoMapper
+* **Payment:** Stripe API Integration
 
 ---
 
@@ -71,7 +72,17 @@ Fast and scalable shopping cart management.
 * `POST /api/basket` - Update items.
 * `DELETE /api/basket` - Clear basket after checkout.
 
+### 4. Payment Module (Stripe Integration) 💳
+Handles the financial transactions securely.
+* **Payment Intent:** Integration with Stripe to create or update payment intents.
+* **Security:** Use of Secret Keys and Publishable Keys for secure transactions.
+* **Order Sync:** Automatically updates the order status based on payment success or failure.
+* `POST /api/payments/{basketId}` - Initialize/Update payment process for a specific basket.
 
+### 5. Order & Checkout
+* **Order Creation:** Automated calculation of subtotal, delivery fees, and stock validation.
+* **Order History:** Users can track their previous orders and status.
+* **Delivery Methods:** Integration of different shipping options with varying costs.
 ---
 
 # Setup & Installation 
@@ -85,6 +96,7 @@ Layered E-Commerce solution using .NET 8, EF Core, Redis.
 - Visual Studio 2022 (or CLI)
 - SQL Server
 - Redis
+- Stripe account
 
 
 ## Setup
